@@ -1,0 +1,28 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block content %}
+    <p style="font-size:25pt;font-family: 'Noto Serif TC', serif;"><b>Registration</b></p>
+    <p class="title">註冊</p>
+    <div id="input">
+        <form method="post" class="input">
+            {% csrf_token %}
+<!--            <input type="password" name="api" placeholder="輸入API" class="input" id="api">-->
+            {{ form }}
+            <button type="submit" id="auth" class="signup">註冊</button>
+        </form>
+        <p style="font-family: 'Noto Serif TC', serif;">已有賬號？<a href="{% url 'weather_app:Authentication' %}">立即登錄</a></p>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}" role="alert">
+            {{message}}
+          </div>
+          {% endfor %}
+
+    {% endif %}
+
+
+<!--    <script src="{% static 'scripts.js' %}"></script>-->
+
+{% endblock %}

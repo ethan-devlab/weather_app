@@ -1,0 +1,23 @@
+{% extends 'basic.html' %}
+
+{% block content %}
+    <p style="font-size:25pt;font-family: 'Noto Serif TC', serif;"><b>Authentication</b></p>
+    <p class="title">登錄</p>
+    <div id="input">
+        <form method="post" class="input">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit" class="auth">確認</button>
+        </form>
+        <p style="font-family: 'Noto Serif TC', serif;">未註冊？<a href="{% url 'weather_app:signup' %}">立即註冊</a></p>
+                <p style="font-family: 'Noto Serif TC', serif;">還沒有API嗎? <a href="https://openweathermap.org/api" target="_blank">立即註冊</a></p>
+
+    </div>
+
+    {% for message in messages %}
+      <div class="alert alert-danger" role="alert">
+        {{message}}
+      </div>
+      {% endfor %}
+
+{% endblock %}
