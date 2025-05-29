@@ -16,16 +16,18 @@ import time
 
 try:
     @ratelimit(key='ip', rate='30/m', method=['GET', 'POST'])
-    @login_required(login_url='/weather_app/authentication')
+    # @login_required(login_url='/weather_app/authentication')
     def index(request):
         was_limited = getattr(request, 'limited', False)
-        if request.COOKIES.get("visited") is None or str(request.COOKIES.get("visited")).lower() == "false" \
-                or request.COOKIES.get('id_token') is None or request.COOKIES.get('id_token') == "":
-            log_out(request)
-            return redirect("/weather_app/authentication")
-        api_key = request.COOKIES.get('id_token')
+        # if request.COOKIES.get("visited") is None or str(request.COOKIES.get("visited")).lower() == "false" \
+        #         or request.COOKIES.get('id_token') is None or request.COOKIES.get('id_token') == "":
+        #     log_out(request)
+        #     return redirect("/weather_app/authentication")
+        # api_key = request.COOKIES.get('id_token')
+
+        api_key = ""  # for testing purpose, put your api key here
+
         current_weather_url = 'https://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid={}'
-        # forecast_url = 'https://api.openweathermap.org/data/2.5/forecast?lat={}&lon={}&exclude=current,minutely,hourly,alerts&appid={}'
         forecast_url = 'https://api.openweathermap.org/data/2.5/forecast?lat={}&lon={}&units=metric&appid={}'
 
         if request.method == 'POST':
@@ -57,14 +59,14 @@ try:
                     'daily_forecasts2': daily_forecasts2,
                 }
 
-                return render(request, 'weather_app/index.html', context)
+                return render(request, 'index.html', context)
 
             except KeyError as e:
                 error_alert(request, f"City not found, maybe city name can be more accurate or the API key is wrong.")
-                return redirect('/weather_app')
+                return redirect('index')
 
         else:
-            return render(request, 'weather_app/index.html')
+            return render(request, 'index.html')
 
         # return render(request, 'weather_app/index.html')
 
@@ -150,7 +152,7 @@ try:
                 # if status == 200:
                 form.save()
                 messages.success(request, "註冊成功！Sign Up Successfully!")
-                response = redirect('/weather_app/authentication')
+                response = redirect('Authentication')
                 time.sleep(3)
                 return response
             else:
@@ -160,7 +162,7 @@ try:
             'form': form
         }
 
-        return render(request, 'weather_app/signup.html', context)
+        return render(request, 'signup.html', context)
 
 
     def valid(key):
@@ -182,12 +184,12 @@ try:
         #                       context={'status': 429, 'message': "Too Many Requests"})
         #     return response
 
-        response = redirect("/weather_app/authentication")
-        if request.COOKIES.get("visited") is not None or str(request.COOKIES.get("visited")).lower() == "false" \
-                or request.COOKIES.get("id_token") is not None or request.COOKIES.get('id_token'):
-            response.delete_cookie("visited")
-            response.delete_cookie("id_token")
-            return response
+        # response = redirect("Authentication")
+        # if request.COOKIES.get("visited") is not None or str(request.COOKIES.get("visited")).lower() == "false" \
+        #         or request.COOKIES.get("id_token") is not None or request.COOKIES.get('id_token'):
+        #     response.delete_cookie("visited")
+        #     response.delete_cookie("id_token")
+        #     return response
 
         form = LoginForm()
 
@@ -197,7 +199,7 @@ try:
             api = request.POST.get('api')
             user = authenticate(request, username=username, password=password)
             data = valid(api)
-            response = redirect("weather_app:index")
+            response = redirect("index")
             max_age = 2 * 60 * 60
 
             if user is not None:
@@ -218,11 +220,11 @@ try:
             'form': form
         }
 
-        return render(request, 'weather_app/authentication.html', context)
+        return render(request, 'authentication.html', context)
 
     def log_out(request):
         logout(request)
-        response = redirect("/weather_app/authentication")
+        response = redirect('Authentication')
         if request.COOKIES.get("visited") is not None or str(request.COOKIES.get("visited")).lower() == "false" \
                 or request.COOKIES.get("id_token") is not None or request.COOKIES.get('id_token'):
             response.delete_cookie("visited")
@@ -230,7 +232,7 @@ try:
 
             return response
 
-        return redirect('/weather_app/authentication')
+        return redirect('Authentication')
 
     def error_alert(request, message):
         messages.error(request, message)
@@ -256,7 +258,7 @@ try:
             'message': "Forbidden"
         }
         log_out(request)
-        return render(request, 'weather_app/403_error.html', status=403, context=context)
+        return render(request, '403_error.html', status=403, context=context)
 
 except Exception as e:
     print(e)

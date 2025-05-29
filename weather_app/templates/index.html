@@ -17,19 +17,19 @@
 
 {% block content %}
 
-    {% include 'weather_app/input.html' %}
+    {% include 'input.html' %}
 
   <div class="comparison-container">
 
     {% if weather_data1 %}
       <div class="city-container">
-        {% include 'weather_app/city_weather.html' with weather_data=weather_data1 daily_forecasts=daily_forecasts1 %}
+        {% include 'city_weather.html' with weather_data=weather_data1 daily_forecasts=daily_forecasts1 %}
       </div>
     {% endif %}
       <br>
     {% if weather_data2 %}
       <div class="city-container">
-        {% include 'weather_app/city_weather.html' with weather_data=weather_data2 daily_forecasts=daily_forecasts2 %}
+        {% include 'city_weather.html' with weather_data=weather_data2 daily_forecasts=daily_forecasts2 %}
       </div>
     {% endif %}
 

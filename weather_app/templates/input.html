@@ -4,7 +4,7 @@
       {% if user.is_authenticated %}
   <p class="welcome">Welcome {{ user }}!</p>
   {% endif %}</li>
-    <li id="logout"><a class="w3-button w3-padding-large w3-white w3-border blog-button" href="{% url 'weather_app:Logout' %}" role="button">
+    <li id="logout"><a class="w3-button w3-padding-large w3-white w3-border blog-button" href="{% url 'Logout' %}" role="button">
       <span>登出</span></a></li>
   </ul>
   <div style="text-align: center">
@@ -17,13 +17,13 @@
     <button type="submit" class="show">Show Weather</button>
   </form>
 
-  {% if messages %}
-    {% for message in messages %}
-      <div class="alert alert-danger" role="alert">
-        {{message}}
-      </div>
-      {% endfor %}
+    {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}" role="alert">
+            {{message}}
+          </div>
+          {% endfor %}
 
-  {% endif %}
+    {% endif %}
 
 </div>
